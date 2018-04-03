@@ -150,6 +150,10 @@ class WebSocketConnection(Thread):
                 self.state = "unavailable"
                 time.sleep(self.reconnect_interval)
 
+                if self.socket.sock:
+                    self.socket.sock.close()
+                    self.socket.sock = None
+
                 # We need to set this flag since closing the socket will
                 # set it to False
                 self.socket.keep_running = True
