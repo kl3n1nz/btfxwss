@@ -68,7 +68,8 @@ class WebSocketConnection(Thread):
         self.connected = Event()
         self.disconnect_called = Event()
         self.reconnect_required = Event()
-        self.reconnect_interval = reconnect_interval if reconnect_interval else 10
+        self.base_reconnect_interval = reconnect_interval if reconnect_interval else 10
+        self.reconnect_interval = self.base_reconnect_interval
         self.paused = Event()
 
         # Setup Timer attributes
@@ -149,6 +150,7 @@ class WebSocketConnection(Thread):
                               % self.reconnect_interval)
                 self.state = "unavailable"
                 time.sleep(self.reconnect_interval)
+                self.reconnect_interval *= 2
 
                 if self.socket.sock:
                     self.socket.sock.close()
@@ -162,6 +164,8 @@ class WebSocketConnection(Thread):
                                 http_proxy_port=self.http_proxy_port,
                                 http_proxy_auth=self.http_proxy_auth,
                                 http_no_proxy=self.http_no_proxy)
+
+        self.reconnect_interval = self.base_reconnect_interval
 
     def run(self):
         """Main method of Thread.
