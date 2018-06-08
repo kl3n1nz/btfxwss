@@ -165,7 +165,7 @@ class WebSocketConnection(Thread):
                                 http_proxy_auth=self.http_proxy_auth,
                                 http_no_proxy=self.http_no_proxy)
 
-        self.reconnect_interval = self.base_reconnect_interval
+            self.reconnect_interval = self.base_reconnect_interval
 
     def run(self):
         """Main method of Thread.
